@@ -1,0 +1,2 @@
+# Simple_imagemagick_nodejs
+ 一个nodejs调用imagemagick的示例。本项目原目的为提供给QQ_bot制图的一个方案
