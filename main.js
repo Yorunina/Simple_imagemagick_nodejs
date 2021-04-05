@@ -9,6 +9,7 @@ function resize_operation(data){
   .write("result.jpg", function (err) {
     if (err) console.log('fetal err!'+err);
   });
+  return;
 }
 
 
@@ -24,17 +25,60 @@ function prprhead(data){
     .in("-geometry",para[i])
     .in(data[0])
     .write("./temp/prprhead/page-" + i + ".png", function (err) {
-      if (err) console.log('fetal err!'+err);
+      if(err){
+        console.log('fetal err!'+err)
+        return;
+      }
+      else{
+        //动图拼接
+        if(i==4){
+          gm()
+          .in("-loop","0")
+          .in("-delay","8")
+          .in("-dispose","Background")
+          .in("temp/prprhead/page-*.png")
+          .write("result.gif", function (err) {
+            if(err){
+              console.log('fetal err!'+err)
+              return;
+            }
+          });
+        }
+      }
     });
   }
-  //动图拼接
-  gm()
-  .in("-loop","0")
-  .in("-delay","8")
-  .in("-dispose","Background")
-  .in("temp/prprhead/page-*.png")
-  .write("result.gif", function (err) {
-    if (err) console.log('fetal err!'+err);
+  return;
+}
+
+//男同，关注了你
+function focus_on_you(data){
+  //文字接入
+  gm("./temp/focus_on_you/focus_on_you.png")
+  .font("./temp/focus_on_you/DroidSansFallback.ttf")
+  .fontSize(30)
+  .drawText(160,75,data[1])
+  .fill('#919191')
+  .fontSize(28)
+  .drawText(160,120,data[2])
+  .write("./temp/focus_on_you/temp.png", function (err) {
+    if(err){
+      console.log('fetal err!'+err)
+      return;
+    }
+    else{
+      //图片叠加
+      gm("./temp/focus_on_you/temp.png")
+      .command("composite")
+      .in("-compose","dstover") 
+      .in("-geometry","125x125!+15+20")
+      .in(data[0])
+      .write("result.png", function (err) {
+        if(err){
+          console.log('fetal err!'+err)
+          return;
+        }
+      });
+    }
   });
 }
 
@@ -50,6 +94,9 @@ switch(type){
     break;
   case "prprhead":
     prprhead(data);
+    break;
+  case "focus_on_you":
+    focus_on_you(data);
     break;
   default:
     console.log('None Operation Done! Plz check your para first.')
