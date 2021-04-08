@@ -86,7 +86,7 @@ function keep_me_do(data){
   //文字接入
   gm("./temp/keep_me_do/keep_me_do.png")
   .draw("image Over 0,0 250,250 "+data[0])
-  .draw("image Over 142,252 40,40 "+data[0])
+  .draw("image Over 142,254 40,40 "+data[0])
   .write("result.png", function (err) {
     if(err){
       console.log('fetal err!'+err)
