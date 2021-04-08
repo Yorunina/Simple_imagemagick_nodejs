@@ -12,13 +12,12 @@ function resize_operation(data){
   return;
 }
 
-
 //摸摸头动图生成
 function prprhead(data){
   //赋予图像压缩调整参数
   para=["80x80!+32+32","70x90!+42+22","75x85!+37+27","85x75!+27+37","90x70!+22+42"];
   //循环制图写出
-  for(var i=0;i<=4;i++){
+  for(let i=0;i<=4;i++){
     gm("./temp/prprhead/sprite-" + i + ".png")
     .command("composite")
     .in("-compose","dstover") 
@@ -95,6 +94,35 @@ function keep_me_do(data){
   });
 }
 
+function own_mark(data){
+  //获取source（原图片）尺寸
+  gm(data[0]).size(function(err, s_value){
+    var s_width = s_value.width;
+    var s_height = s_value.height;
+    //回调中获取水印文件尺寸
+    gm(data[1]).size(function(err, o_value){
+      var o_width = o_value.width;
+      var o_height = o_value.height;
+      //标准化高度
+      o_height = s_width/o_width*o_height;
+      o_width = s_width;
+      //计算绘出次数
+      let draw_time = Math.ceil(s_height/(o_height+50));
+      let func = gm(data[0]);
+      let y = 50;
+      //进行draw image
+      for(let i=1;i<=draw_time;i++){
+        func.draw("image Over 0,"+y+" "+o_width+","+o_height+" "+data[1]);
+        y = 50 + y + o_height;
+      }
+      //写出图片流
+      func.write("result.png",function(err){})
+      return;
+    })
+  });
+  
+}
+
 var arguments = process.argv.splice(2);
 var type = arguments[0];
 //后续参数提取
@@ -113,6 +141,9 @@ switch(type){
     break;
   case "keep_me_do":
     keep_me_do(data);
+    break;
+  case "own_mark":
+    own_mark(data);
     break;
   default:
     console.log('None Operation Done! Plz check your para first.')
