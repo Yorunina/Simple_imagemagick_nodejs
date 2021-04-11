@@ -82,7 +82,6 @@ function focus_on_you(data){
 }
 
 function keep_me_do(data){
-  //文字接入
   gm("./temp/keep_me_do/keep_me_do.png")
   .draw("image Over 0,0 250,250 "+data[0])
   .draw("image Over 142,254 40,40 "+data[0])

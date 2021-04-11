@@ -1,2 +1,2 @@
-node main.js keep_me_do test.jpg
+node image2ascii.js
 pause
